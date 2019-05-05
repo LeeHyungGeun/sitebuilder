@@ -80,6 +80,7 @@ const config = {
     hot: true,
     https: false,
     noInfo: true,
+    open: true,
     historyApiFallback: true,
     proxy: {
       '/api': 'http://localhost:3000'
