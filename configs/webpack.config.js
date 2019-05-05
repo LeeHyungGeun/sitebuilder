@@ -88,4 +88,4 @@ const config = {
   }
 }
 
-module.exports.default = config;
+module.exports = config;
