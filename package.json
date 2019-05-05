@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node_modules/.bin/babel-node ./index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -16,5 +17,11 @@
   "bugs": {
     "url": "https://github.com/LeeHyungGeun/sitebuilder/issues"
   },
-  "homepage": "https://github.com/LeeHyungGeun/sitebuilder#readme"
+  "homepage": "https://github.com/LeeHyungGeun/sitebuilder#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.4",
+    "@babel/node": "^7.2.2",
+    "@babel/preset-env": "^7.4.4"
+  }
 }
