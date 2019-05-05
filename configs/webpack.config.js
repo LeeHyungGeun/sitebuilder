@@ -47,6 +47,9 @@ const config = {
     ]
   },
   resolve: {
+    alias: {
+      '@': paths.context
+    },
     modules: [
       "node_modules"
     ],
