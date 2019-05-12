@@ -79,7 +79,7 @@ const config = {
   devServer: {
     contentBase: paths.dist,
     compress: true,
-    port: 9000,
+    port: 9999,
     hot: true,
     https: false,
     noInfo: true,
