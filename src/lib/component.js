@@ -1,11 +1,10 @@
-import aggregation from './aggregation'
 const _options = {
-  color: 'blue'
+  color: 'red',
+  width: '200px',
+  height: '300px'
 }
 
-// const _LCLASS = aggregation(Resize, Rectangle)
-
-class Component extends HTMLElement  {
+class Component extends HTMLElement {
   constructor(options) {
     super()
     
@@ -13,28 +12,31 @@ class Component extends HTMLElement  {
     
     this.initEvent()
     this.createRectangle()
+    this.setRectangleStyle()
     this.initResizeEvent()
   }
   createRectangle() {
-    var shadow = this.attachShadow({ mode: 'open' })
-    var div = document.createElement('div')
-    div.style = `width: 500px; height: 300px; background: ${this.options.color}; position: relative;`
-    var style = document.createElement('style')
-    this.$elm = div
-    shadow.appendChild(style)
-    shadow.appendChild(div)
-    this.host = shadow.host
+    this.shadow = this.attachShadow({ mode: 'open' })
+    this.$elm = document.createElement('div')
+    this.host = this.shadow.host
+    this.$style = document.createElement('style')
+    this.shadow.appendChild(this.$style)
+    this.shadow.appendChild(this.$elm)
+  }
+  setRectangleStyle() {
+    const { width, height, color } = this.options
+    this.$elm.style = `width: ${width}; height: ${height}; background: ${color}; position: relative;`
+    // this.$elm.style = `width: ${width}; height: ${height}; background: ${color}; position: relative;`
   }
   initEvent() {
-    window.addEventListener('click', (e) => {
-      this.$elm.after.style = 'content: ""; display: block; position: absolute; width: 100%; height: 100%; border: 1px solid #3899ec'
-      if (e.path.indexOf(this.$elm) === -1) {
-        this.$elm.style.border = ''
-      } else {
-        this.$elm.after.style = 'content: ""; display: block; position: absolute; width: 100%; height: 100%; border: 1px solid #3899ec'
-      }
-
-    })
+    // window.addEventListener('click', (e) => {
+    //   this.$elm.after.style = 'content: ""; display: block; position: absolute; width: 100%; height: 100%; border: 1px solid #3899ec'
+    //   if (e.path.indexOf(this.$elm) === -1) {
+    //     this.$elm.style.border = ''
+    //   } else {
+    //     this.$elm.after.style = 'content: ""; display: block; position: absolute; width: 100%; height: 100%; border: 1px solid #3899ec'
+    //   }
+    // })
   }
   initResizeEvent() {
     this.$elm.setAttribute('draggable', true)
@@ -60,6 +62,16 @@ class Component extends HTMLElement  {
 let img = new Image();
 img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=';
 const setCloneImage = e => e.dataTransfer.setDragImage(img, 0, 0);
-window.customElements.define('app-drawer', Component)
 
-export default Component
+window.customElements.define('app-drawer', Component)
+// console.log(document.createElement('app-drawer'))
+const AppDrawer = customElements.get('app-drawer');
+const yellow = new AppDrawer({ color: 'yellow' }); // pass constructor values like so.
+const blue = new AppDrawer({ color: 'blue' }); // pass constructor values like so.
+const green = new AppDrawer({ color: 'green' }); // pass constructor values like so.
+
+document.querySelector('#root').appendChild(yellow)
+document.querySelector('#root').appendChild(blue)
+document.querySelector('#root').appendChild(green)
+
+// export default Component
