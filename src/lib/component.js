@@ -10,8 +10,8 @@ class Component extends HTMLElement {
     
     this.options = Object.assign({}, _options, options)
     
-    this.initEvent()
     this.createRectangle()
+    this.initEvent()
     this.setRectangleStyle()
     this.initResizeEvent()
   }
@@ -29,17 +29,22 @@ class Component extends HTMLElement {
     // this.$elm.style = `width: ${width}; height: ${height}; background: ${color}; position: relative;`
   }
   initEvent() {
-    // window.addEventListener('click', (e) => {
-    //   this.$elm.after.style = 'content: ""; display: block; position: absolute; width: 100%; height: 100%; border: 1px solid #3899ec'
-    //   if (e.path.indexOf(this.$elm) === -1) {
-    //     this.$elm.style.border = ''
-    //   } else {
-    //     this.$elm.after.style = 'content: ""; display: block; position: absolute; width: 100%; height: 100%; border: 1px solid #3899ec'
-    //   }
-    // })
+    this.$after = document.createElement('div')
+    this.$afterTop = document.createElement('div')
+    this.$elm.appendChild(this.$after)
+    this.$elm.appendChild(this.$afterTop)
+    this.$afterTop.setAttribute('draggable', true)
+    window.addEventListener('click', e => {
+      if (e.path.indexOf(this.$elm) === -1 && e.path.indexOf(this.$after) === -1) {
+        this.$after.style = ''
+      } else {
+        this.$after.style = 'content: ""; display: block; top: 0; left: 0; position: absolute; width: 100%; height: 100%; border: 3px solid #3899ec;'
+        this.$afterTop.style = 'position: absolute; top: 0; left: 50%; width: 20px; height: 20px; border-radius: 50%; transform: translate(-50%, -50%); background: blue;'
+      }
+    })
   }
   initResizeEvent() {
-    this.$elm.setAttribute('draggable', true)
+    // this.$elm.setAttribute('draggable', true)
     this.$elm.addEventListener('dragstart', (e) => {
       setCloneImage(e)
       this.targetElement = e.target
@@ -71,7 +76,7 @@ const blue = new AppDrawer({ color: 'blue' }); // pass constructor values like s
 const green = new AppDrawer({ color: 'green' }); // pass constructor values like so.
 
 document.querySelector('#root').appendChild(yellow)
-document.querySelector('#root').appendChild(blue)
-document.querySelector('#root').appendChild(green)
+// document.querySelector('#root').appendChild(blue)
+// document.querySelector('#root').appendChild(green)
 
 // export default Component
