@@ -165,7 +165,7 @@ const yellow = new AppDrawer({ color: 'yellow' }); // pass constructor values li
 // const blue = new AppDrawer({ color: 'blue' }); // pass constructor values like so.
 // const green = new AppDrawer({ color: 'green' }); // pass constructor values like so.
 
-document.querySelector('#root').appendChild(green)
+document.querySelector('#root').appendChild(yellow)
 // document.querySelector('#root').appendChild(blue)
 // document.querySelector('#root').appendChild(green)
 
