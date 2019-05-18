@@ -31,7 +31,7 @@ const resize = ($elm, $target, DIRNUM) => {
   }, true)
 
   const mousemoves = fromEvent(document, 'mousemove')
-  const result = mousemoves.pipe(debounce(() => interval(30)))
+  const result = mousemoves.pipe(debounce(() => interval(0)))
   result.subscribe(e => {
     e.preventDefault()
     e.stopPropagation()
