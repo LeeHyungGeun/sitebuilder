@@ -1,3 +1,6 @@
+import { fromEvent, interval } from 'rxjs';
+import { debounce } from 'rxjs/operators';
+
 export const DIRECTIONS = {
   TOPLEFT: 0,
   TOP: 1, 
@@ -16,23 +19,44 @@ const resize = ($elm, $target, DIRNUM) => {
     clientX: 0,
     clientY: 0
   }
+
   $elm.addEventListener('mousedown', e => {
     e.stopPropagation()
-    e.preventDefault(
-      clicked = true
-    )
+    e.preventDefault()
+    clicked = true
     client = {
       clientX: e.clientX,
       clientY: e.clientY
     }
   }, true)
 
+  const mousemoves = fromEvent(document, 'mousemove')
+  const result = mousemoves.pipe(debounce(() => interval(30)))
+  result.subscribe(e => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (clicked === true) {
+      resizeEvent(e)
+      client = {
+        clientX: e.clientX,
+        clientY: e.clientY
+      }
+    }
+  })
+
   window.addEventListener('mouseup', (e) => {
     e.stopPropagation()
     e.preventDefault()
     if (clicked) {
+      resizeEvent(e)
       clicked = false
+    }
+  }, true)
 
+  const resizeEvent = (e) => {
+    e.stopPropagation()
+    e.preventDefault()
+    if (clicked) {
       switch (DIR) {
         case 'TOP': {
           $target.style.height = parseInt($target.style.height) + Number(client.clientY) - Number(e.clientY) + 'px'
@@ -78,7 +102,8 @@ const resize = ($elm, $target, DIRNUM) => {
         }
       }
     }
-  }, true)
-} 
+  }
+}
+
 
 export default resize
