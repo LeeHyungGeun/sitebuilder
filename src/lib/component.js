@@ -27,6 +27,7 @@ class Component extends HTMLElement {
   }
   setComponentStyle() {
     const { width, height, color } = this.options
+    // this.$elm.style = `width: ${width}; height: ${height}; background: ${color}; top: 100px; left: 500px; position: absolute; transition: all 0.2s ease-out;`
     this.$elm.style = `width: ${width}; height: ${height}; background: ${color}; top: 100px; left: 500px; position: absolute;`
   }
   resize() {
@@ -41,6 +42,7 @@ class Component extends HTMLElement {
     this.$afterLeft = document.createElement('div')
     const commonStyle = 'position: absolute; width: 20px; height: 20px; border-radius: 50%; transform: translate(-50%, -50%); background: blue; cursor: pointer;'
     this.$after.style = 'content: ""; display: block; top: 0; left: 0; position: absolute; width: 100%; height: 100%; border: 3px solid #3899ec;'
+    
     this.$afterTop.style = `top: 0; left: 50%; ${commonStyle}`
     this.$afterTopRight.style = `top: 0; left: 100%; ${commonStyle}`
     this.$afterTopLeft.style = `top: 0; left: 0; ${commonStyle}`
