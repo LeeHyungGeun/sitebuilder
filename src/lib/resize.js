@@ -21,7 +21,7 @@ const resize = ($elm, $target, DIRNUM) => {
   }
 
   $elm.addEventListener('mousedown', e => {
-    e.stopPropagation()
+    // e.stopPropagation()
     e.preventDefault()
     clicked = true
     client = {
@@ -34,8 +34,9 @@ const resize = ($elm, $target, DIRNUM) => {
   const result = mousemoves.pipe(debounce(() => interval(0)))
   result.subscribe(e => {
     e.preventDefault()
-    e.stopPropagation()
+    // e.stopPropagation()
     if (clicked === true) {
+      // e.stopPropagation()
       resizeEvent(e)
       client = {
         clientX: e.clientX,
@@ -45,7 +46,7 @@ const resize = ($elm, $target, DIRNUM) => {
   })
 
   window.addEventListener('mouseup', (e) => {
-    e.stopPropagation()
+    // e.stopPropagation()
     e.preventDefault()
     if (clicked) {
       resizeEvent(e)
@@ -54,7 +55,7 @@ const resize = ($elm, $target, DIRNUM) => {
   }, true)
 
   const resizeEvent = (e) => {
-    e.stopPropagation()
+    // e.stopPropagation()
     e.preventDefault()
     if (clicked) {
       switch (DIR) {

@@ -14,6 +14,7 @@ class Component extends HTMLElement {
     
     this.setComponent()
     this.resize()
+    this.drag()
     this.setComponentStyle()
     // this.initResizeEvent()
   }
@@ -29,6 +30,39 @@ class Component extends HTMLElement {
     const { width, height, color } = this.options
     // this.$elm.style = `width: ${width}; height: ${height}; background: ${color}; top: 100px; left: 500px; position: absolute; transition: all 0.2s ease-out;`
     this.$elm.style = `width: ${width}; height: ${height}; background: ${color}; top: 100px; left: 500px; position: absolute;`
+  }
+  drag() {
+    let dragging = false
+    let client = {
+      clientX: 0,
+      clientY: 0
+    }
+    this.$elm.addEventListener('mousedown', (e) => {
+      client = {
+        clientX: e.clientX,
+        clientY: e.clientY
+      }
+      dragging = e.target === this.$elm ? true : false
+    }, true)
+    this.$elm.addEventListener('mousemove', (e) => {
+      e.preventDefault()
+      
+      if (dragging) {
+        this.$elm.style.left = parseInt(this.$elm.style.left) + e.clientX - client.clientX + 'px'
+        this.$elm.style.top = parseInt(this.$elm.style.top) + e.clientY - client.clientY + 'px'
+        client = {
+          clientX: e.clientX,
+          clientY: e.clientY
+        }
+      }
+
+    })
+    document.addEventListener('mouseup', (e) => {
+      dragging = false
+    })
+    // this.$elm.addEventListener('mouse', (e) => {
+
+    // })
   }
   resize() {
     this.$after = document.createElement('div')
@@ -62,7 +96,8 @@ class Component extends HTMLElement {
     resize(this.$afterLeft, this.$elm, DIRECTIONS.LEFT)
     window.addEventListener('click', e => {
       if (e.path.indexOf(this.$elm) === -1) {
-        this.$elm.contains(this.$after) && this.$elm.removeChild(this.$after)
+        // this.$elm.contains(this.$after) && this.$elm.removeChild(this.$after)
+        this.$elm.style.border = ''
         this.$elm.contains(this.$afterTop) && this.$elm.removeChild(this.$afterTop)
         this.$elm.contains(this.$afterTopRight) && this.$elm.removeChild(this.$afterTopRight)
         this.$elm.contains(this.$afterTopLeft) && this.$elm.removeChild(this.$afterTopLeft)
@@ -72,7 +107,8 @@ class Component extends HTMLElement {
         this.$elm.contains(this.$afterBottomLeft) && this.$elm.removeChild(this.$afterBottomLeft)
         this.$elm.contains(this.$afterLeft) && this.$elm.removeChild(this.$afterLeft)
       } else {
-        this.$elm.appendChild(this.$after)
+        // this.$elm.appendChild(this.$after)
+        this.$elm.style.border = '3px solid #3899ec'
         this.$elm.appendChild(this.$afterTop)
         this.$elm.appendChild(this.$afterTopRight)
         this.$elm.appendChild(this.$afterTopLeft)
@@ -84,36 +120,36 @@ class Component extends HTMLElement {
       }
     })
   }
-  resizeEvent($elm, $target) {
-    let clicked = false
-    let client = {
-      clientX: 0,
-      clientY: 0
-    }
-    $elm.addEventListener('mousedown', (e) => {
-      e.stopPropagation()
-      e.preventDefault()
-      clicked = true
-      client = {
-        clientX: e.clientX, 
-        clientY: e.clientY
-      }
-    }, true)
-    window.addEventListener('mouseup', (e) => {
-      e.stopPropagation()
-      e.preventDefault()
-      if (clicked) {
-        clicked = false
-        // console.log(`x: ${e.clientX - client.clientX}`)
-        // console.log(`y: ${e.clientY - client.clientY}`)
-        // $target.style.width = parseInt($target.style.width) + Number(e.clientX) - Number(client.clientX) + 'px'
-        $target.style.height = parseInt($target.style.height) + Number(client.clientY) - Number(e.clientY) + 'px'
-        $target.style.top = parseInt($target.style.top) - (Number(client.clientY) - Number(e.clientY)) + 'px'
-      }
-      // console.log(clicked)
-    }, true)
+  // resizeEvent($elm, $target) {
+  //   let clicked = false
+  //   let client = {
+  //     clientX: 0,
+  //     clientY: 0
+  //   }
+  //   $elm.addEventListener('mousedown', (e) => {
+  //     // e.stopPropagation()
+  //     e.preventDefault()
+  //     clicked = true
+  //     client = {
+  //       clientX: e.clientX, 
+  //       clientY: e.clientY
+  //     }
+  //   }, true)
+  //   window.addEventListener('mouseup', (e) => {
+  //     // e.stopPropagation()
+  //     e.preventDefault()
+  //     if (clicked) {
+  //       clicked = false
+  //       // console.log(`x: ${e.clientX - client.clientX}`)
+  //       // console.log(`y: ${e.clientY - client.clientY}`)
+  //       // $target.style.width = parseInt($target.style.width) + Number(e.clientX) - Number(client.clientX) + 'px'
+  //       $target.style.height = parseInt($target.style.height) + Number(client.clientY) - Number(e.clientY) + 'px'
+  //       $target.style.top = parseInt($target.style.top) - (Number(client.clientY) - Number(e.clientY)) + 'px'
+  //     }
+  //     // console.log(clicked)
+  //   }, true)
 
-  }
+  // }
   // initResize($elm, $target) {
   //   $elm.addEventListener('dragstart', (e) => {
   //     this.previous = {
@@ -137,25 +173,25 @@ class Component extends HTMLElement {
   //   // console.log(Number(e.clientX) - Number(this.previous.clientX))
   //   //   this.$elm.style.width = `calc(${this.$elm.style.width} + ${Number(e.clientX) - Number(this.previous.clientX)})`
   // }
-  initResizeEvent() {
-    // this.$elm.setAttribute('draggable', true)
-    this.$elm.addEventListener('dragstart', (e) => {
-      setCloneImage(e)
-      this.targetElement = e.target
-      this.previousElement = {
-        clientX: e.clientX,
-        clientY: e.clientY
-      }
-    })
-    this.$elm.addEventListener('dragover', (e) => e.preventDefault())
-    this.$elm.addEventListener('drag', (e) => {
-      this.targetElement.style.width = `${this.targetElement.offsetWidth + (e.clientX - this.previousElement.clientX)}px`
-      this.targetElement.style.height = `${this.targetElement.offsetHeight + (e.clientY - this.previousElement.clientY)}px`
-      this.previousElement.clientX = e.clientX
-      this.previousElement.clientY = e.clientY
-    })
-    this.$elm.addEventListener('drop', (e) => this.targetElement = null)
-  }
+  // initResizeEvent() {
+  //   // this.$elm.setAttribute('draggable', true)
+  //   this.$elm.addEventListener('dragstart', (e) => {
+  //     setCloneImage(e)
+  //     this.targetElement = e.target
+  //     this.previousElement = {
+  //       clientX: e.clientX,
+  //       clientY: e.clientY
+  //     }
+  //   })
+  //   this.$elm.addEventListener('dragover', (e) => e.preventDefault())
+  //   this.$elm.addEventListener('drag', (e) => {
+  //     this.targetElement.style.width = `${this.targetElement.offsetWidth + (e.clientX - this.previousElement.clientX)}px`
+  //     this.targetElement.style.height = `${this.targetElement.offsetHeight + (e.clientY - this.previousElement.clientY)}px`
+  //     this.previousElement.clientX = e.clientX
+  //     this.previousElement.clientY = e.clientY
+  //   })
+  //   this.$elm.addEventListener('drop', (e) => this.targetElement = null)
+  // }
 }
 let img = new Image();
 img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=';
